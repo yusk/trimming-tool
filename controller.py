@@ -1,3 +1,8 @@
+import os
+import glob
+import datetime
+
+
 class Controller():
 
     INTERVAL = 50
@@ -35,8 +40,11 @@ class Controller():
         )
 
         # 読み込みボタン押し下げイベント受付
-        self.view.load_button['command'] = self.push_load_button
-        self.view.load_dir_btn['command'] = self.push_input_dir_btn
+        self.view.input_dir_btn['command'] = self.push_input_dir_btn
+        self.view.output_dir_btn['command'] = self.push_output_dir_btn
+        self.view.left_btn['command'] = self.push_left_btn
+        self.view.right_btn['command'] = self.push_right_btn
+        self.view.save_btn['command'] = self.push_save_btn
 
         # 画像の描画用のタイマーセット
         self.master.after(Controller.INTERVAL, self.timer)
@@ -59,12 +67,7 @@ class Controller():
         # 再度タイマー設定
         self.master.after(Controller.INTERVAL, self.timer)
 
-    def push_load_button(self):
-        'ファイル選択ボタンが押された時の処理'
-
-        # ファイル選択画面表示
-        file_path = self.view.select_file()
-
+    def draw_img(self, file_path):
         # 画像ファイルの読み込みと描画
         if len(file_path) != 0:
             self.model.read(file_path)
@@ -77,9 +80,44 @@ class Controller():
         # メッセージを更新
         self.message = "トリミングする範囲を指定してください"
 
+    def draw_img_with_idx(self, i):
+        if i < 0:
+            i = 0
+        elif i >= len(self.file_paths):
+            i = len(self.file_paths) - 1
+        self.draw_img(self.file_paths[i])
+        self.message = f"{i} / {len(self.file_paths)}: {self.file_paths[i]}"
+
     def push_input_dir_btn(self):
         file_dir = self.view.select_dir()
-        print(file_dir)
+        self.file_paths = [
+            v for v in glob.glob(os.path.join(file_dir, "*.jpg"))
+        ]
+        self.idx = 0
+        self.draw_img_with_idx(self.idx)
+
+    def push_output_dir_btn(self):
+        self.output_dir = self.view.select_dir()
+
+    def push_left_btn(self):
+        self.idx -= 1
+        if self.idx < 0:
+            self.idx = 0
+        self.draw_img_with_idx(self.idx)
+
+    def push_right_btn(self):
+        self.idx += 1
+        if self.idx >= len(self.file_paths):
+            self.idx = len(self.file_paths) - 1
+        self.draw_img_with_idx(self.idx)
+
+    def push_save_btn(self):
+        file_name, ext = os.path.splitext(
+            os.path.basename(self.file_paths[self.idx]))
+        d = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        new_file_path = os.path.join(self.output_dir,
+                                     file_name + "__" + d + ext)
+        self.model.after_image.save(new_file_path)
 
     def button_press(self, event):
         'マウスボタン押し下げ開始時の処理'

@@ -6,6 +6,8 @@ class Model():
     BEFORE = 1
     AFTER = 2
 
+    MAX_SIZE = 400
+
     def __init__(self):
 
         # PIL画像オブジェクトを参照
@@ -24,7 +26,6 @@ class Model():
                 # Tkinter画像オブジェクトに変換
                 self.before_image_tk = ImageTk.PhotoImage(self.before_image)
             return self.before_image_tk
-
         elif type == Model.AFTER:
             if self.after_image is not None:
                 # Tkinter画像オブジェクトに変換
@@ -39,6 +40,13 @@ class Model():
 
         # pathの画像を読み込んでPIL画像オブジェクト生成
         self.before_image = Image.open(path)
+        self.resize()
+
+    def resize(self):
+        size = self.before_image.size
+        r = self.MAX_SIZE / max(size)
+        self.before_image = self.before_image.resize(
+            (int(size[0] * r), int(size[1] * r)))
 
     def round(self, value, min, max):
         'valueをminからmaxの範囲に丸める'

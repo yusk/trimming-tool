@@ -3,13 +3,11 @@ import tkinter.filedialog
 
 
 class View():
-
     # キャンバス指定用
     LEFT_CANVAS = 1
     RIGHT_CANVAS = 2
 
     def __init__(self, app, model):
-
         self.master = app
         self.model = model
 
@@ -57,13 +55,19 @@ class View():
         )
         self.right_canvas.grid(column=2, row=1)
 
-        # ファイル読み込みボタンの作成と配置
-        self.load_button = tkinter.Button(self.button_frame, text="ファイル選択")
-        self.load_button.pack()
-
-        # ファイル読み込みボタンの作成と配置
-        self.load_dir_btn = tkinter.Button(self.button_frame, text="input dir")
-        self.load_dir_btn.pack()
+        # btns
+        self.input_dir_btn = tkinter.Button(self.button_frame,
+                                            text="input dir")
+        self.input_dir_btn.pack()
+        self.output_dir_btn = tkinter.Button(self.button_frame,
+                                             text="output dir")
+        self.output_dir_btn.pack()
+        self.left_btn = tkinter.Button(self.button_frame, text="←")
+        self.left_btn.pack()
+        self.right_btn = tkinter.Button(self.button_frame, text="→")
+        self.right_btn.pack()
+        self.save_btn = tkinter.Button(self.button_frame, text="save")
+        self.save_btn.pack()
 
         # メッセージ表示ラベルの作成と配置
 
