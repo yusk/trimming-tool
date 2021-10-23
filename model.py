@@ -1,12 +1,14 @@
 from PIL import Image, ImageTk
 
+from constants import IMG_SIZE
+
 
 class Model():
     # 画像処理前か画像処理後かを指定
     BEFORE = 1
     AFTER = 2
 
-    MAX_SIZE = 400
+    MAX_SIZE = IMG_SIZE
 
     def __init__(self):
 

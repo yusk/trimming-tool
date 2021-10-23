@@ -23,6 +23,9 @@ class Controller():
 
     def set_events(self):
         '受け付けるイベントを設定する'
+        self.master.bind("<Left>", self.push_left_btn)
+        self.master.bind("<Right>", self.push_right_btn)
+        # self.master.focus_set()
 
         # キャンバス上のマウス押し下げ開始イベント受付
         self.view.left_canvas.bind("<ButtonPress>", self.button_press)
@@ -99,13 +102,13 @@ class Controller():
     def push_output_dir_btn(self):
         self.output_dir = self.view.select_dir()
 
-    def push_left_btn(self):
+    def push_left_btn(self, *args):
         self.idx -= 1
         if self.idx < 0:
             self.idx = 0
         self.draw_img_with_idx(self.idx)
 
-    def push_right_btn(self):
+    def push_right_btn(self, *args):
         self.idx += 1
         if self.idx >= len(self.file_paths):
             self.idx = len(self.file_paths) - 1

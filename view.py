@@ -1,6 +1,8 @@
 import tkinter
 import tkinter.filedialog
 
+from constants import IMG_SIZE
+
 
 class View():
     # キャンバス指定用
@@ -18,8 +20,8 @@ class View():
         'アプリ内にウィジェットを作成・配置する'
 
         # キャンバスのサイズ
-        canvas_width = 400
-        canvas_height = 400
+        canvas_width = IMG_SIZE
+        canvas_height = IMG_SIZE
 
         # キャンバスとボタンを配置するフレームの作成と配置
         self.main_frame = tkinter.Frame(self.master)
